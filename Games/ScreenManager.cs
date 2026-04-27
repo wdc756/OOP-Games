@@ -28,7 +28,7 @@ namespace Games
             if (x < 0 || x >= GetScreenWidth() || y < 0 || y >= GetScreenHeight())
                 throw new IndexOutOfRangeException($"Can't clear point {x},{y} - out of range {GetScreenWidth()},{GetScreenHeight()}");
             
-            Console.SetCursorPosition(x, x);
+            Console.SetCursorPosition(x, y);
             Console.Write(" ");
         }
         

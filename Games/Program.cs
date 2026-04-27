@@ -1,4 +1,6 @@
 using System;
+using System.Threading;
+using Games.Games;
 
 namespace Games
 {
@@ -6,7 +8,14 @@ namespace Games
     {
         public static void Main(string[] args)
         {
-            Console.WriteLine("Hello There!");
+            Context context = new Context(new Pong());
+
+            ScreenManager.ClearScreen();
+            while (true)
+            {
+                Thread.Sleep(50);
+                context.Update(0.25);
+            }
         }
     }
 }

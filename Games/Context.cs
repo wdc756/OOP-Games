@@ -17,6 +17,12 @@ namespace Games
 
 
 
+        // Use this to update time-based games
+        public void Update(double deltaTime)
+        {
+            game.Update(deltaTime);
+        }
+
         // Use this to handle single-key inputs
         public void KeyInput(string key)
         {

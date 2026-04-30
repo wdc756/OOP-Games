@@ -36,14 +36,14 @@ namespace Games
         
         
         // The proper order for calling functions is:
-        //   0. Reset on init (calls Render once)
+        //   0. Reset on init - DO NOT RENDER
         //   1. Input
         //   2. Update
         //   3. Render
         //   p: Pause
         //   n: End
         
-        // Reset game (including initial render)
+        // Reset game - DO NOT RENDER
         public void Reset()
         {
             _game.Reset();

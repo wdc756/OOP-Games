@@ -25,16 +25,20 @@ namespace Games
             return _game.UpdateTime();
         }
         
+        
+        
+        // The proper order for calling functions is:
+        //   0. Reset on init (calls Render once)
+        //   1. Input
+        //   2. Update
+        //   3. Render
+        //   p: Pause
+        //   n: End
+        
         // Reset game (including initial render)
         public void Reset()
         {
             _game.Reset();
-        }
-        
-        // Render state of game to console
-        public void Render()
-        {
-            _game.Render();
         }
         
         // Handle single-key inputs (string line inputs handled by game internally)
@@ -47,6 +51,24 @@ namespace Games
         public bool Update()
         {
             return _game.Update();
+        }
+        
+        // Render state of game to console
+        public void Render()
+        {
+            _game.Render();
+        }
+        
+        // Pause state
+        public bool Pause()
+        {
+            return _game.Pause();
+        }
+        
+        // End of game state
+        public void End()
+        {
+            _game.End();
         }
     }
 }

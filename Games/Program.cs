@@ -44,6 +44,13 @@ namespace Games
                 // Update game
                 if (!context.Update())
                 {
+                    // If current state is menu, it handles end differently so just continue
+                    if (context.IsMainMenu())
+                    {
+                        context.End();
+                        continue;
+                    }
+                    
                     // If we're here, it means the game ended, so send to end screen
                     context.End();
                     
@@ -51,6 +58,12 @@ namespace Games
                     context.TransitionTo(new Menu());
                     context.Reset();
                 }
+                
+                // Render each new frame
+                context.Render();
+                
+                // Sleep using set timer to avoid constant stack calls
+                Thread.Sleep(context.UpdateTime());
             }
             
             ScreenManager.ClearScreen();

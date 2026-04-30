@@ -5,23 +5,24 @@ namespace Games.Games
 {
     public class Menu : Game
     {
-        private Dictionary<String, Game> _games;
+        private Dictionary<String, Type> _games;
         private int _selectedGame;
         private bool _gameWasSelected;
 
         public Menu()
         {
             // Set time between updates to 0.5s
-            _updateTime = 0.5;
+            _updateTime = 50;
         }
 
 
 
         public override void Reset()
         {
-            _games = new Dictionary<String, Game>
+            _games = new Dictionary<String, Type>
             {
-                { "Pong", new Pong() }
+                { "Pong", typeof(Pong) },
+                { "Pong 2", typeof(Pong) },
             };
             _selectedGame = 0;
             _gameWasSelected = false;
@@ -77,7 +78,7 @@ namespace Games.Games
         private void RenderOptions()
         {
             int i = 0;
-            foreach (KeyValuePair<String, Game> kvp in _games)
+            foreach (KeyValuePair<String, Type> kvp in _games)
             {
                 RenderOption(i, kvp.Key);
                 i++;
@@ -86,7 +87,7 @@ namespace Games.Games
 
         private void RenderSelection()
         {
-            ScreenManager.Print(_selectedGame, 1, "->");
+            ScreenManager.Print(1, _selectedGame + 4, "->");
         }
 
         private void RenderExitInstructions()
@@ -110,16 +111,19 @@ namespace Games.Games
             return true; // Nothing to pause on Menu
         }
 
+        
+        
         public override void End()
         {
             // Get game based on selected index
             int i = 0;
             Game game = null;
-            foreach (KeyValuePair<String, Game> kvp in _games)
+            foreach (KeyValuePair<String, Type> kvp in _games)
             {
                 if (i == _selectedGame)
                 {
-                    game = kvp.Value;
+                    Type type = kvp.Value;
+                    game = (Game)Activator.CreateInstance(type);
                     break;
                 }
                 i++;

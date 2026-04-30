@@ -1,3 +1,5 @@
+using System;
+
 namespace Games
 {
     public abstract class Game
@@ -13,8 +15,6 @@ namespace Games
 
         public abstract void Update(double deltaTime);
 
-        public abstract void HandleKeyInput(string key);
-
-        public abstract void HandleInput(string input);
+        public abstract void HandleKeyInput(ConsoleKeyInfo key);
     }
 }

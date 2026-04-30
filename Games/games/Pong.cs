@@ -48,14 +48,9 @@ namespace Games.Games
             UpdateBall();
         }
 
-        public override void HandleKeyInput(string key)
+        public override void HandleKeyInput(ConsoleKeyInfo key)
         {
-            throw new System.NotImplementedException();
-        }
-
-        public override void HandleInput(string input)
-        {
-            throw new System.NotImplementedException();
+            
         }
     }
 }

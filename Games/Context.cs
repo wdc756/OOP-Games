@@ -1,3 +1,5 @@
+using System;
+
 namespace Games
 {
     public class Context
@@ -24,15 +26,9 @@ namespace Games
         }
 
         // Use this to handle single-key inputs
-        public void KeyInput(string key)
+        public void KeyInput(ConsoleKeyInfo key)
         {
             game.HandleKeyInput(key);
-        }
-
-        // Use this to handle multi-char string inputs
-        public void Input(string input)
-        {
-            game.HandleInput(input);
         }
     }
 }

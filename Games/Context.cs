@@ -4,7 +4,7 @@ namespace Games
 {
     public class Context
     {
-        private Game game = null;
+        private Game _game;
 
         public Context(Game game)
         {
@@ -13,22 +13,40 @@ namespace Games
 
         public void TransitionTo(Game game)
         {
-            this.game = game;
-            game.SetContext(this);
+            _game = game;
+            _game.SetContext(this);
         }
 
 
 
-        // Use this to update time-based games
-        public void Update(double deltaTime)
+        // Time in (s) between game updates
+        public double UpdateTime()
         {
-            game.Update(deltaTime);
+            return _game.UpdateTime();
+        }
+        
+        // Reset game (including initial render)
+        public void Reset()
+        {
+            _game.Reset();
+        }
+        
+        // Render state of game to console
+        public void Render()
+        {
+            _game.Render();
+        }
+        
+        // Handle single-key inputs (string line inputs handled by game internally)
+        public void Input(ConsoleKeyInfo key)
+        {
+            _game.Input(key);
         }
 
-        // Use this to handle single-key inputs
-        public void KeyInput(ConsoleKeyInfo key)
+        // Updates the game logic (does not render)
+        public bool Update()
         {
-            game.HandleKeyInput(key);
+            return _game.Update();
         }
     }
 }

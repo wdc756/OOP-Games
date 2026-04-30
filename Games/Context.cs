@@ -1,4 +1,5 @@
 using System;
+using Games.Games;
 
 namespace Games
 {
@@ -11,10 +12,17 @@ namespace Games
             TransitionTo(game);
         }
 
+        
+        
         public void TransitionTo(Game game)
         {
             _game = game;
             _game.SetContext(this);
+        }
+
+        public bool IsMainMenu()
+        {
+            return _game is Menu;
         }
 
 

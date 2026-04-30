@@ -92,12 +92,18 @@ namespace Games.Games
             ScreenManager.Print(_selectedGame, 1, "->");
         }
 
+        private void RenderExitInstructions()
+        {
+            ScreenManager.Print(1, _games.Count + 5, "To exit press Esc");
+        }
+
         public override void Render()
         {
             ScreenManager.ClearScreen();
             RenderTitle();
             RenderOptions();
             RenderSelection();
+            RenderExitInstructions();
         }
 
 

@@ -42,6 +42,7 @@
     <ItemGroup>
         <Compile Include="Context.cs" />
         <Compile Include="Game.cs" />
+        <Compile Include="games\Menu.cs" />
         <Compile Include="games\Pong.cs" />
         <Compile Include="Program.cs"/>
         <Compile Include="Properties\AssemblyInfo.cs"/>

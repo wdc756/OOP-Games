@@ -8,35 +8,49 @@ namespace Games
     {
         public static void Main(string[] args)
         {
-            // Change the game here to change what runs first
-            Context context = new Context(new Pong());
+            Context context = new Context(new Menu());
 
-            // Clear screen and start game
-            ScreenManager.ClearScreen();
+            context.Reset();
             while (true)
             {
                 // Check if key has been pressed
                 if (Console.KeyAvailable)
                 {
                     // Get key without printing
-                    ConsoleKeyInfo keyInfo = Console.ReadKey(true);
+                    ConsoleKeyInfo key = Console.ReadKey(true);
                 
-                    // If key was escape, exit
-                    if (keyInfo.Key == ConsoleKey.Escape)
-                        break;
+                    // If key was escape, pause game
+                    if (key.Key == ConsoleKey.Escape)
+                    {
+                        // If current game is Menu, quit program
+                        if (context.IsMainMenu())
+                        {
+                            break;
+                        }
+                        
+                        // If pause returns false go back to main menu
+                        if (!context.Pause())
+                        {
+                            context.TransitionTo(new Menu());
+                            context.Reset();
+                            continue;
+                        }
+                    }
                     
                     // Else pass key
-                    context.KeyInput(keyInfo);
-                }
-
-                // Else just update
-                else
-                {
-                    context.Update(0.05);
+                    context.Input(key);
                 }
                 
-                // Sleep to avoid stack overflow
-                Thread.Sleep(50); // (ms) - must match with Update
+                // Update game
+                if (!context.Update())
+                {
+                    // If we're here, it means the game ended, so send to end screen
+                    context.End();
+                    
+                    // After end screen transition to game selection menu
+                    context.TransitionTo(new Menu());
+                    context.Reset();
+                }
             }
             
             ScreenManager.ClearScreen();

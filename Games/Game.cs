@@ -7,8 +7,8 @@ namespace Games
         // State-driven design context (used to switch to other states if needed)
         protected Context _context;
         
-        // Time between Update() calls
-        protected Double _updateTime = 1.0;
+        // Time between Update() calls (ms)
+        protected int _updateTime = 100;
 
         public void SetContext(Context context)
         {
@@ -18,7 +18,7 @@ namespace Games
 
 
         // Get the time (s) between Update() calls
-        public double UpdateTime()
+        public int UpdateTime()
         {
             return _updateTime;
         }

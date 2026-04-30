@@ -18,14 +18,18 @@ namespace Games.Games
         private bool _gameOver;
         private string _gameWinner;
 
+        
+        
         public Pong()
         {
-            Reset();
+            // Set update timer to 0.25s
+            _updateTime = 25;
         }
 
-        private void Reset()
+        
+        
+        public override void Reset()
         {
-            // Set all vars
             _ballX = ScreenManager.GetScreenWidth() - 3;
             _ballY = ScreenManager.GetScreenHeight() / 2;
             _ballMovingRight = false;
@@ -39,28 +43,32 @@ namespace Games.Games
             _aiMovingDown = false;
             _gameOver = false;
             _gameWinner = "";
-            
-            // Create initial object displays
-            UpdateBall();
-            DisplayPaddle(_playerPaddleX, _playerPaddleY, _playerPaddleHeight, "|");
-            DisplayPaddle(_aiPaddleX, _aiPaddleY, _aiPaddleHeight, "|");
+        }
+        
+        
+        
+        private void HandlePlayerInput(ConsoleKeyInfo key)
+        {
+            // Handle inputs
+            if (key.Key == ConsoleKey.UpArrow && _playerPaddleY > 1)
+            {
+                _playerPaddleY--;
+            }
+            else if (key.Key == ConsoleKey.DownArrow && _playerPaddleY < ScreenManager.GetScreenHeight() - _playerPaddleHeight - 1)
+            {
+                _playerPaddleY++;
+            }
         }
 
-
-        
-        private void DisplayPaddle(int x, int y, int h, string paddle)
+        public override void Input(ConsoleKeyInfo key)
         {
-            for (int i = 0; i < h; i++)
-                ScreenManager.DrawPoint(x, y + i, paddle);
+            HandlePlayerInput(key);
         }
 
         
         
         private void UpdateBall()
         {
-            // Clear last location's marker
-            ScreenManager.ClearPoint(_ballX, _ballY);
-            
             // Move diagonally
             if (_ballMovingRight) _ballX++;
             else _ballX--;
@@ -96,22 +104,18 @@ namespace Games.Games
                 _ballY < _playerPaddleY + _playerPaddleHeight && _ballY > _playerPaddleY)
             {
                 _ballMovingRight = true;
+                _ballX = _playerPaddleX + 1;
             }
             else if (_ballMovingRight && _ballX == _aiPaddleX &&
                      _ballY < _aiPaddleY + _aiPaddleHeight && _ballY > _aiPaddleY)
             {
                 _ballMovingRight = false;
+                _ballX = _aiPaddleX - 1;
             }
-            
-            // Draw updated ball marker
-            ScreenManager.DrawPoint(_ballX, _ballY, "o");
         }
 
         private void UpdateAI()
         {
-            // Clear last paddle marker
-            DisplayPaddle(_aiPaddleX, _aiPaddleY, _aiPaddleHeight, " ");
-            
             // Update position
             if (_aiMovingDown) _aiPaddleY++;
             else _aiPaddleY--;
@@ -127,31 +131,51 @@ namespace Games.Games
                 _aiMovingDown = false;
                 _aiPaddleY = ScreenManager.GetScreenHeight() - _aiPaddleHeight - 1;
             }
-            
-            // Display new paddle marker
-            DisplayPaddle(_aiPaddleX, _aiPaddleY, _aiPaddleHeight, "|");
         }
 
-        private void UpdatePlayer(ConsoleKeyInfo key)
+        public override bool Update()
         {
-            // Clear last paddle marker
-            DisplayPaddle(_playerPaddleX, _playerPaddleY, _playerPaddleHeight, " ");
-            
-            // Handle inputs
-            if (key.Key == ConsoleKey.UpArrow && _playerPaddleY > 1)
-            {
-                _playerPaddleY--;
-            }
-            else if (key.Key == ConsoleKey.DownArrow && _playerPaddleY < ScreenManager.GetScreenHeight() - _playerPaddleHeight - 1)
-            {
-                _playerPaddleY++;
-            }
-            
-            // Display new paddle marker
-            DisplayPaddle(_playerPaddleX, _playerPaddleY, _playerPaddleHeight, "|");
+            if (_gameOver) return false;
+            UpdateBall();
+            UpdateAI();
+            return true;
         }
         
-        private void DisplayGameOver()
+        
+        
+        private void RenderBall()
+        {
+            ScreenManager.SetPoint(_ballX, _ballY, 'o');
+        }
+
+        private void RenderPaddle(int x, int y, int h, char c)
+        {
+            for (int i = 0; i < h; i++)
+                ScreenManager.SetPoint(x, y + i, c);
+        }
+
+        private void RenderPaddles()
+        {
+            RenderPaddle(_playerPaddleX, _playerPaddleY, _playerPaddleHeight, '|');
+            RenderPaddle(_aiPaddleX, _aiPaddleY, _aiPaddleHeight, '|');
+        }
+
+        public override void Render()
+        {
+            ScreenManager.ClearScreen();
+            RenderBall();
+            RenderPaddles();
+        }
+
+
+        public override bool Pause()
+        {
+            return true; // No pause menu implemented
+        }
+
+        
+        
+        public override void End()
         {
             ScreenManager.ClearScreen();
             Console.WriteLine("Game Over");
@@ -159,23 +183,6 @@ namespace Games.Games
             
             // Wait for user to input something to clear the screen
             Console.ReadKey(true);
-        }
-
-        public override void Update(double deltaTime)
-        {
-            if (_gameOver)
-            {
-                DisplayGameOver();
-                return;
-            }
-            UpdateAI();
-            UpdateBall();
-        }
-
-        public override void HandleKeyInput(ConsoleKeyInfo key)
-        {
-            Update(0.0);
-            UpdatePlayer(key);
         }
     }
 }

@@ -18,6 +18,7 @@ namespace Games
         {
             _game = game;
             _game.SetContext(this);
+            _game.Reset();
         }
 
         public bool IsMainMenu()
@@ -28,7 +29,7 @@ namespace Games
 
 
         // Time in (s) between game updates
-        public double UpdateTime()
+        public int UpdateTime()
         {
             return _game.UpdateTime();
         }

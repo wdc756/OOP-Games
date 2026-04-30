@@ -22,7 +22,7 @@ namespace Games.Games
             _games = new Dictionary<String, Type>
             {
                 { "Pong", typeof(Pong) },
-                { "Pong 2", typeof(Pong) },
+                { "BlackJack", typeof(BlackJack) },
             };
             _selectedGame = 0;
             _gameWasSelected = false;

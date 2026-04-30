@@ -1,5 +1,5 @@
 # OOP Games
 
 Will - Pong
-Musa - War
+Musa - Snake
 Mya - Blackjack

@@ -22,8 +22,8 @@ namespace Games.Games
         
         public Pong()
         {
-            // Set update timer to 0.25s
-            _updateTime = 25;
+            // Set update timer to 0.05s
+            _updateTime = 50;
         }
 
         

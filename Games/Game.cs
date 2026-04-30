@@ -8,12 +8,11 @@ namespace Games
         protected Context _context;
         
         // Time between Update() calls
-        protected Double updateTime;
+        protected Double _updateTime = 1.0;
 
         public void SetContext(Context context)
         {
             _context = context;
-            updateTime = 1.0;
         }
 
 
@@ -21,7 +20,7 @@ namespace Games
         // Get the time (s) between Update() calls
         public double UpdateTime()
         {
-            return updateTime;
+            return _updateTime;
         }
         
         

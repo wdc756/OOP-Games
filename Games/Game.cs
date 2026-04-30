@@ -26,14 +26,14 @@ namespace Games
         
         
         // The proper order for calling functions is:
-        //   0. Reset on init (calls Render once)
+        //   0. Reset on init (DO NOT RENDER)
         //   1. Input
         //   2. Update
         //   3. Render
         //   p: Pause
         //   n: End
         
-        // Reset game to initial state (including display)
+        // Reset game to initial state - DO NOT RENDER
         public abstract void Reset();
         
         // Handle single-key inputs (only called when inputs are given)

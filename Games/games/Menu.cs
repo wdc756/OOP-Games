@@ -25,9 +25,6 @@ namespace Games.Games
             };
             _selectedGame = 0;
             _gameWasSelected = false;
-            
-            // Render initial state
-            Render();
         }
 
 

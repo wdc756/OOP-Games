@@ -28,6 +28,12 @@ namespace Games.Games
         // Holds game state
         private bool gameOver;
 
+
+        // scores for a win condition
+        private int _score;
+        private bool _gameWon;
+        private int WIN_SCORE = 10;
+
         
         
         public Snake()
@@ -94,6 +100,10 @@ namespace Games.Games
             appleY = 0;
             rng = new Random();
             gameOver = false;
+
+            // reset score
+            _score = 0;
+            _gameWon = false;
             
             // Setup initial snake body and apple
             SpawnSnake();
@@ -168,6 +178,11 @@ namespace Games.Games
                 // since we grew one
                 snakeX.Enqueue(newHeadX);
                 snakeY.Enqueue(newHeadY);
+
+                // move the score up since they at an apple
+                _score++;
+                // end game if they are greater than threshold of 10
+                if (_score >= WIN_SCORE) { _gameWon = true; return; }
                 
                 // spawn a new apple for the snake to find
                 SpawnApple();
@@ -181,12 +196,18 @@ namespace Games.Games
                 // add new head
                 snakeX.Enqueue(newHeadX);
                 snakeY.Enqueue(newHeadY);
+
             }
         }
 
         public override bool Update()
         {
-            if (gameOver) return false; // False means game is over
+            // now we also have a win condition with the bool and
+            // threshold of 10 apples
+            if (gameOver || _gameWon)
+            {
+                return false;
+            }
             UpdateSnakeApple();
             return true; // True means game is still running
         }
@@ -248,8 +269,17 @@ namespace Games.Games
         public override void End()
         {
             Console.ForegroundColor = ConsoleColor.White;
-            ScreenManager.Print(width / 2 - 4, height / 2, "GAME OVER");
-            Console.ReadKey(); // Wait for user to press key to end game (return to menu)
+            if (_gameWon)
+            {
+                ScreenManager.Print(width / 2 - 4, height / 2, "YOU WIN! ");
+                Console.ReadKey();
+                _context.TransitionTo(new BlackJack());
+            }
+            else
+            {
+                ScreenManager.Print(width / 2 - 4, height / 2, "GAME OVER");
+                Console.ReadKey();
+            }
         }
     }
 }

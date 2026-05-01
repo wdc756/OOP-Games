@@ -66,7 +66,9 @@ namespace Games
                 Thread.Sleep(context.UpdateTime());
             }
             
+            // Reset console
             ScreenManager.ClearScreen();
+            Console.CursorVisible = true;
             Console.WriteLine("Thanks for playing!");
         }
     }

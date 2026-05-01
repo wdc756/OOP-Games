@@ -32,8 +32,8 @@ namespace Games.Games
         
         public Snake()
         {
-            // Set update tick speed to 0.05s
-            _updateTime = 50;
+            // Set update tick speed to 0.075s
+            _updateTime = 75;
         }
         
         
@@ -195,20 +195,17 @@ namespace Games.Games
 
         private void RenderBorder()
         {
-            // displays text in different colors
-            // our border will be red
-            Console.ForegroundColor = ConsoleColor.Red;
             // using the Screen manager we made
             // and the bounds we set earlier
             for (int x = 0; x <= width; x++)
             {
-                ScreenManager.SetPoint(x, 0, '#');
-                ScreenManager.SetPoint(x, height, '#');
+                ScreenManager.SetPoint(x, 0, '#', ConsoleColor.Red);
+                ScreenManager.SetPoint(x, height, '#', ConsoleColor.Red);
             }
             for (int y = 0; y <= height; y++)
             {
-                ScreenManager.SetPoint(0, y, '#');
-                ScreenManager.SetPoint(width, y, '#');
+                ScreenManager.SetPoint(0, y, '#', ConsoleColor.Red);
+                ScreenManager.SetPoint(width, y, '#', ConsoleColor.Red);
             }
         }
 
@@ -220,17 +217,15 @@ namespace Games.Games
             int[] ys = snakeY.ToArray();
             
             // For each point, draw snake body
-            Console.ForegroundColor = ConsoleColor.Green;
             for (int i = 0; i < xs.Length; i++)
             {
-                ScreenManager.SetPoint(xs[i], ys[i], 'O');
+                ScreenManager.SetPoint(xs[i], ys[i], 'O', ConsoleColor.Green);
             }
         }
 
         private void RenderApple()
         {
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            ScreenManager.SetPoint(appleX, appleY, '@');
+            ScreenManager.SetPoint(appleX, appleY, '@', ConsoleColor.Yellow);
         }
 
         public override void Render()

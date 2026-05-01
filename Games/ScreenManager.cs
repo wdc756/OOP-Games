@@ -24,6 +24,12 @@ namespace Games
             
             // Removes the blinking cursor
             Console.CursorVisible = false;
+            
+            // Sets default text color
+            Console.ForegroundColor = ConsoleColor.White;
+            
+            // Sets default background color
+            Console.BackgroundColor = ConsoleColor.Black;
         }
 
         // Use this to set a given point to empty char
@@ -38,8 +44,10 @@ namespace Games
         }
         
         // Use this to set a given point to the char provided
-        public static void SetPoint(int x, int y, char c)
+        public static void SetPoint(int x, int y, char c, ConsoleColor color = ConsoleColor.White)
         {
+            Console.ForegroundColor = color;
+            
             if (x < 0 || x >= GetScreenWidth() || y < 0 || y >= GetScreenHeight())
                 throw new IndexOutOfRangeException($"Can't draw point {x},{y} - out of range {GetScreenWidth()},{GetScreenHeight()}");
             
@@ -49,8 +57,10 @@ namespace Games
         }
         
         // Use this to print a string starting at a given coordinate
-        public static void Print(int x, int y, string s)
+        public static void Print(int x, int y, string s, ConsoleColor color = ConsoleColor.White)
         {
+            Console.ForegroundColor = color;
+            
             if (x < 0 || x >= GetScreenWidth() || y < 0 || y >= GetScreenHeight())
                 throw new IndexOutOfRangeException($"Can't print at {x},{y} - out of range {GetScreenWidth()},{GetScreenHeight()}");
             if (x + s.Length > GetScreenWidth())

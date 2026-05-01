@@ -39,7 +39,7 @@ namespace Games.Games
             _playerPaddleHeight = 5;
             _aiPaddleX = ScreenManager.GetScreenWidth() - 2;
             _aiPaddleY = ScreenManager.GetScreenHeight() / 2;
-            _aiPaddleHeight = 7;
+            _aiPaddleHeight = 10;
             _aiMovingDown = false;
             _gameOver = false;
             _gameWinner = "";

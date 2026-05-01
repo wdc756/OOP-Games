@@ -170,6 +170,8 @@ namespace Games.Games
 
         public override bool Pause()
         {
+            // Transition since this will end the game
+            _context.TransitionTo(new Snake());
             return false; // No pause menu implemented - false = quit game
         }
 
@@ -183,6 +185,9 @@ namespace Games.Games
             
             // Wait for user to input something to clear the screen
             Console.ReadKey(true);
+            
+            // Transition to next game
+            _context.TransitionTo(new Snake());
         }
     }
 }

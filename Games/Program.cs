@@ -8,9 +8,17 @@ namespace Games
     {
         public static void Main(string[] args)
         {
-            Context context = new Context(new Menu());
-
+            // Tell use about escape key
+            Console.WriteLine("Press escape to skip through games");
+            Console.WriteLine("Press any key to continue...");
+            Console.ReadKey();
+            
+            // Counter to keep track of # of games played, and context (state) to interact with
+            int endCounter = 0;
+            Context context = new Context(new Pong());
+            
             context.Reset();
+            // Loop until last state ends
             while (true)
             {
                 // Check if key has been pressed
@@ -22,16 +30,13 @@ namespace Games
                     // If key was escape, pause game
                     if (key.Key == ConsoleKey.Escape)
                     {
-                        // If current game is Menu, quit program
-                        if (context.IsMainMenu())
-                        {
-                            break;
-                        }
+                        // If we've played 3 games stop loop
+                        endCounter++;
+                        if (endCounter == 3) break;
                         
-                        // If pause returns false go back to main menu
+                        // If pause returns false transition to next state (done internally)
                         if (!context.Pause())
                         {
-                            context.TransitionTo(new Menu());
                             context.Reset();
                             continue;
                         }
@@ -44,19 +49,16 @@ namespace Games
                 // Update game
                 if (!context.Update())
                 {
-                    // If current state is menu, it handles end differently so just continue
-                    if (context.IsMainMenu())
-                    {
-                        context.End();
-                        continue;
-                    }
-                    
                     // If we're here, it means the game ended, so send to end screen
                     context.End();
                     
-                    // After end screen transition to game selection menu
-                    context.TransitionTo(new Menu());
+                    // If we've played 3 games stop loop
+                    endCounter++;
+                    if (endCounter == 3) break;
+                    
+                    // After end screen assume state changed
                     context.Reset();
+                    continue;
                 }
                 
                 // Render each new frame

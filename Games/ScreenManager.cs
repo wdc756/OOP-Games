@@ -27,9 +27,6 @@ namespace Games
             
             // Sets default text color
             Console.ForegroundColor = ConsoleColor.White;
-            
-            // Sets default background color
-            Console.BackgroundColor = ConsoleColor.Black;
         }
 
         // Use this to set a given point to empty char

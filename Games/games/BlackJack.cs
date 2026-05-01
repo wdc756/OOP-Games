@@ -362,7 +362,7 @@ namespace Games.Games
 
         public override bool Pause()
         {
-            return false; // Esc during blackjack returns to main menu
+            return false; // Esc during blackjack exits program
         }
 
         public override void End()

@@ -21,11 +21,6 @@ namespace Games
             _game.Reset();
         }
 
-        public bool IsMainMenu()
-        {
-            return _game is Menu;
-        }
-
 
 
         // Time in (s) between game updates

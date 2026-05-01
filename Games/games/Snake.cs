@@ -261,6 +261,8 @@ namespace Games.Games
         
         public override bool Pause()
         {
+            // Transition since this will end the game
+            _context.TransitionTo(new BlackJack());
             return false; // No pause menu implemented - false = quit game
         }
 
@@ -269,17 +271,11 @@ namespace Games.Games
         public override void End()
         {
             Console.ForegroundColor = ConsoleColor.White;
-            if (_gameWon)
-            {
-                ScreenManager.Print(width / 2 - 4, height / 2, "YOU WIN! ");
-                Console.ReadKey();
-                _context.TransitionTo(new BlackJack());
-            }
-            else
-            {
-                ScreenManager.Print(width / 2 - 4, height / 2, "GAME OVER");
-                Console.ReadKey();
-            }
+            ScreenManager.Print(width / 2 - 4, height / 2, "GAME OVER");
+            Console.ReadKey(); // Wait for user to press key to end game (return to menu)
+            
+            // Transition to next game
+            _context.TransitionTo(new BlackJack());
         }
     }
 }

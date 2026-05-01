@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+// to let the user see they won for a couple seconds
+using System.Threading;
 
 //DO NOT KILL (REMOVE)
 //Programming Duck - Muffin

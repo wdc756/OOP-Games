@@ -84,7 +84,7 @@ namespace Games.Games
         // Controls how long the house-reveal animation pauses between hits (ms).
         // Update() is called on a timer, so each Update() during HouseReveal
         // processes one house action and returns true to keep going.
-        private bool _houseActionPending;
+
 
 
 

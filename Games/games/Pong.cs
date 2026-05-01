@@ -170,7 +170,7 @@ namespace Games.Games
 
         public override bool Pause()
         {
-            return true; // No pause menu implemented
+            return false; // No pause menu implemented - false = quit game
         }
 
         

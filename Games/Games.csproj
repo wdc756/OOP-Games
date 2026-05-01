@@ -45,6 +45,7 @@
         <Compile Include="games\Menu.cs" />
         <Compile Include="games\Pong.cs" />
         <Compile Include="games\BlackJack.cs" />
+        <Compile Include="games\Snake.cs" />
         <Compile Include="Program.cs"/>
         <Compile Include="Properties\AssemblyInfo.cs"/>
         <Compile Include="ScreenManager.cs" />

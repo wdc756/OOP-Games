@@ -23,6 +23,7 @@ namespace Games.Games
             {
                 { "Pong", typeof(Pong) },
                 { "BlackJack", typeof(BlackJack) },
+                { "Snake", typeof(Snake) },
             };
             _selectedGame = 0;
             _gameWasSelected = false;

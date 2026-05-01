@@ -19,7 +19,11 @@ namespace Games
         // Use this to clear everything on the screen
         public static void ClearScreen()
         {
+            // Clears the whole terminal window
             Console.Clear();
+            
+            // Removes the blinking cursor
+            Console.CursorVisible = false;
         }
 
         // Use this to set a given point to empty char
@@ -30,6 +34,7 @@ namespace Games
             
             Console.SetCursorPosition(x, y);
             Console.Write(" ");
+            Console.CursorVisible = false;
         }
         
         // Use this to set a given point to the char provided
@@ -40,6 +45,7 @@ namespace Games
             
             Console.SetCursorPosition(x, y);
             Console.Write(c);
+            Console.CursorVisible = false;
         }
         
         // Use this to print a string starting at a given coordinate
@@ -52,6 +58,7 @@ namespace Games
             
             Console.SetCursorPosition(x, y);
             Console.Write(s);
+            Console.CursorVisible = false;
         }
     }
 }

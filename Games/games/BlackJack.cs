@@ -368,7 +368,7 @@ namespace Games.Games
         public override void End()
         {
             // Program.cs handles the transition back to Menu after End() returns.
-            // Nothing extra needed here.
+            Console.ReadKey(); // Read a key to wait (so user can see end screen)
         }
 
         

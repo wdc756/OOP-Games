@@ -1,81 +1,103 @@
 using System;
+using System.Threading;
 
 namespace Games.Games
 {
     public class Pong : Game
     {
+        // ball position and previous position (for erasing)
         private int _ballX;
         private int _ballY;
+        private int _prevBallX;
+        private int _prevBallY;
         private bool _ballMovingRight;
         private bool _ballMovingDown;
+
+        // player paddle position, previous position, and height
         private int _playerPaddleX;
         private int _playerPaddleY;
+        private int _prevPlayerPaddleY;
         private int _playerPaddleHeight;
+
+        // ai paddle position, previous position, and height
         private int _aiPaddleX;
         private int _aiPaddleY;
+        private int _prevAiPaddleY;
         private int _aiPaddleHeight;
         private bool _aiMovingDown;
+        private int _aiMoveCounter; // throttles ai speed, only moves every 3 frames
+
         private bool _gameOver;
         private string _gameWinner;
 
-        
-        
+
+
         public Pong()
         {
-            // Set update timer to 0.05s
-            _updateTime = 50;
+            // set update timer to 0.08s
+            _updateTime = 80;
         }
 
-        
-        
+
+
         public override void Reset()
         {
-            _ballX = ScreenManager.GetScreenWidth() - 3;
+            _ballX = ScreenManager.GetScreenWidth() / 2;
             _ballY = ScreenManager.GetScreenHeight() / 2;
+            _prevBallX = _ballX;
+            _prevBallY = _ballY;
             _ballMovingRight = false;
             _ballMovingDown = false;
             _playerPaddleX = 1;
             _playerPaddleY = ScreenManager.GetScreenHeight() / 2;
-            _playerPaddleHeight = 5;
+            _prevPlayerPaddleY = _playerPaddleY;
+            _playerPaddleHeight = 8;
             _aiPaddleX = ScreenManager.GetScreenWidth() - 2;
             _aiPaddleY = ScreenManager.GetScreenHeight() / 2;
-            _aiPaddleHeight = 10;
+            _prevAiPaddleY = _aiPaddleY;
+            _aiPaddleHeight = 3;
             _aiMovingDown = false;
+            _aiMoveCounter = 0;
             _gameOver = false;
             _gameWinner = "";
+
+            ScreenManager.ClearScreen();
+
+            // draw paddles once on reset
+            for (int i = 0; i < _playerPaddleHeight; i++)
+                ScreenManager.SetPoint(_playerPaddleX, _playerPaddleY + i, '|');
+            for (int i = 0; i < _aiPaddleHeight; i++)
+                ScreenManager.SetPoint(_aiPaddleX, _aiPaddleY + i, '|');
         }
-        
-        
-        
-        private void HandlePlayerInput(ConsoleKeyInfo key)
-        {
-            // Handle inputs
-            if (key.Key == ConsoleKey.UpArrow && _playerPaddleY > 1)
-            {
-                _playerPaddleY--;
-            }
-            else if (key.Key == ConsoleKey.DownArrow && _playerPaddleY < ScreenManager.GetScreenHeight() - _playerPaddleHeight - 1)
-            {
-                _playerPaddleY++;
-            }
-        }
+
+
 
         public override void Input(ConsoleKeyInfo key)
         {
-            HandlePlayerInput(key);
+            // save previous position before moving
+            _prevPlayerPaddleY = _playerPaddleY;
+
+            if (key.Key == ConsoleKey.UpArrow && _playerPaddleY > 1)
+                _playerPaddleY -= 2;
+            else if (key.Key == ConsoleKey.DownArrow && _playerPaddleY < ScreenManager.GetScreenHeight() - _playerPaddleHeight - 1)
+                _playerPaddleY += 2;
         }
 
-        
-        
+
+
         private void UpdateBall()
         {
-            // Move diagonally
+            // save previous position so we can erase it next render
+            _prevBallX = _ballX;
+            _prevBallY = _ballY;
+
+            // move ball diagonally
             if (_ballMovingRight) _ballX++;
             else _ballX--;
             if (_ballMovingDown) _ballY--;
             else _ballY++;
-            
-            // Handle bounds
+
+            // handle screen bounds
             if (_ballX < 1)
             {
                 _gameOver = true;
@@ -98,16 +120,16 @@ namespace Games.Games
                 _ballY = ScreenManager.GetScreenHeight() - 1;
                 _ballMovingDown = true;
             }
-            
-            // Handle paddles
-            if (!_ballMovingRight && _ballX == _playerPaddleX && 
-                _ballY < _playerPaddleY + _playerPaddleHeight && _ballY > _playerPaddleY)
+
+            // handle paddle collisions
+            if (!_ballMovingRight && _ballX == _playerPaddleX &&
+                _ballY >= _playerPaddleY && _ballY < _playerPaddleY + _playerPaddleHeight)
             {
                 _ballMovingRight = true;
                 _ballX = _playerPaddleX + 1;
             }
             else if (_ballMovingRight && _ballX == _aiPaddleX &&
-                     _ballY < _aiPaddleY + _aiPaddleHeight && _ballY > _aiPaddleY)
+                     _ballY >= _aiPaddleY && _ballY < _aiPaddleY + _aiPaddleHeight)
             {
                 _ballMovingRight = false;
                 _ballX = _aiPaddleX - 1;
@@ -116,11 +138,16 @@ namespace Games.Games
 
         private void UpdateAI()
         {
-            // Update position
+            // only move every 3 frames to keep the ai slow and beatable
+            _aiMoveCounter++;
+            if (_aiMoveCounter % 3 != 0) return;
+
+            // save previous position so we can erase it next render
+            _prevAiPaddleY = _aiPaddleY;
+
             if (_aiMovingDown) _aiPaddleY++;
             else _aiPaddleY--;
-            
-            // Handle bounds
+
             if (_aiPaddleY < 1)
             {
                 _aiMovingDown = true;
@@ -140,54 +167,47 @@ namespace Games.Games
             UpdateAI();
             return true;
         }
-        
-        
-        
-        private void RenderBall()
-        {
-            ScreenManager.SetPoint(_ballX, _ballY, 'o');
-        }
 
-        private void RenderPaddle(int x, int y, int h, char c)
-        {
-            for (int i = 0; i < h; i++)
-                ScreenManager.SetPoint(x, y + i, c);
-        }
 
-        private void RenderPaddles()
-        {
-            RenderPaddle(_playerPaddleX, _playerPaddleY, _playerPaddleHeight, '|');
-            RenderPaddle(_aiPaddleX, _aiPaddleY, _aiPaddleHeight, '|');
-        }
 
         public override void Render()
         {
-            ScreenManager.ClearScreen();
-            RenderBall();
-            RenderPaddles();
+            // erase and redraw ball
+            ScreenManager.ClearPoint(_prevBallX, _prevBallY);
+            ScreenManager.SetPoint(_ballX, _ballY, 'o');
+
+            // erase and redraw player paddle
+            for (int i = 0; i < _playerPaddleHeight; i++)
+                ScreenManager.ClearPoint(_playerPaddleX, _prevPlayerPaddleY + i);
+            for (int i = 0; i < _playerPaddleHeight; i++)
+                ScreenManager.SetPoint(_playerPaddleX, _playerPaddleY + i, '|');
+
+            // erase and redraw ai paddle
+            for (int i = 0; i < _aiPaddleHeight; i++)
+                ScreenManager.ClearPoint(_aiPaddleX, _prevAiPaddleY + i);
+            for (int i = 0; i < _aiPaddleHeight; i++)
+                ScreenManager.SetPoint(_aiPaddleX, _aiPaddleY + i, '|');
         }
+
 
 
         public override bool Pause()
         {
-            // Transition since this will end the game
-            _context.TransitionTo(new Snake());
-            return false; // No pause menu implemented - false = quit game
+            return false; // no pause menu, false = quit game
         }
 
-        
-        
         public override void End()
         {
             ScreenManager.ClearScreen();
             Console.WriteLine("Game Over");
             Console.WriteLine($"{_gameWinner} Won!");
-            
-            // Wait for user to input something to clear the screen
-            Console.ReadKey(true);
-            
-            // Transition to next game
-            _context.TransitionTo(new Snake());
+            Thread.Sleep(2000);
+
+            // only move to next state if player won
+            if (_gameWinner == "You")
+                _context.TransitionTo(new Snake());
+            else
+                _context.TransitionTo(new Pong());
         }
     }
 }

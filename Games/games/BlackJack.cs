@@ -98,6 +98,7 @@ namespace Games.Games
 
         public override void Reset()
         {
+            ScreenManager.ClearScreen();
             _chips = 1000;
             _bet = 50;
             _betIncrementIndex = 0;
@@ -365,11 +366,19 @@ namespace Games.Games
             return false; // Esc during blackjack exits program
         }
 
+
         public override void End()
         {
-            // Program.cs handles the transition back to Menu after End() returns.
-            Console.ReadKey(); // Read a key to wait (so user can see end screen)
+            if (_chips >= 2000)
+            {
+                //give the user a second to see that they won
+                Thread.Sleep(3000);
+                _context.TransitionTo(new Pong());
+            }
+            else
+                _context.TransitionTo(new BlackJack()); // bankrupt, restart blackjack
         }
+
 
         
 

@@ -4,7 +4,7 @@ namespace Games
 {
     public static class ScreenManager
     {
-        // Use these to get screen dims
+        // use these to get screen dims
         public static int GetScreenWidth()
         {
             return Console.WindowWidth;
@@ -14,55 +14,49 @@ namespace Games
             return Console.WindowHeight;
         }
 
-        
-        
-        // Use this to clear everything on the screen
+
+
+        // clears the whole screen once (only call this on game start/reset, not every frame)
         public static void ClearScreen()
         {
-            // Clears the whole terminal window
             Console.Clear();
-            
-            // Removes the blinking cursor
             Console.CursorVisible = false;
-            
-            // Sets default text color
             Console.ForegroundColor = ConsoleColor.White;
+            Console.BackgroundColor = ConsoleColor.Black;
         }
 
-        // Use this to set a given point to empty char
+        // use this to clear a single point (erase a character)
         public static void ClearPoint(int x, int y)
         {
             if (x < 0 || x >= GetScreenWidth() || y < 0 || y >= GetScreenHeight())
-                throw new IndexOutOfRangeException($"Can't clear point {x},{y} - out of range {GetScreenWidth()},{GetScreenHeight()}");
-            
+                return;
+
             Console.SetCursorPosition(x, y);
             Console.Write(" ");
             Console.CursorVisible = false;
         }
-        
-        // Use this to set a given point to the char provided
+
+        // use this to set a given point to the char provided
         public static void SetPoint(int x, int y, char c, ConsoleColor color = ConsoleColor.White)
         {
-            Console.ForegroundColor = color;
-            
             if (x < 0 || x >= GetScreenWidth() || y < 0 || y >= GetScreenHeight())
-                throw new IndexOutOfRangeException($"Can't draw point {x},{y} - out of range {GetScreenWidth()},{GetScreenHeight()}");
-            
+                return;
+
+            Console.ForegroundColor = color;
             Console.SetCursorPosition(x, y);
             Console.Write(c);
             Console.CursorVisible = false;
         }
-        
-        // Use this to print a string starting at a given coordinate
+
+        // use this to print a string starting at a given coordinate
         public static void Print(int x, int y, string s, ConsoleColor color = ConsoleColor.White)
         {
-            Console.ForegroundColor = color;
-            
             if (x < 0 || x >= GetScreenWidth() || y < 0 || y >= GetScreenHeight())
-                throw new IndexOutOfRangeException($"Can't print at {x},{y} - out of range {GetScreenWidth()},{GetScreenHeight()}");
+                return;
             if (x + s.Length > GetScreenWidth())
-                throw new ArgumentException($"Cannot print string with length {s.Length} at {x} - out of range {GetScreenWidth()}");
-            
+                return;
+
+            Console.ForegroundColor = color;
             Console.SetCursorPosition(x, y);
             Console.Write(s);
             Console.CursorVisible = false;
